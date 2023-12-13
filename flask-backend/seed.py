@@ -14,13 +14,14 @@ def encypt_password(password):
 
 def make_users():
     users = []
-    for _ in range(30):
+    for _ in range(5):
         users.append(
             User(
-                username=faker.name(),
+                username=faker.word(),
                 password= encypt_password("password"),
                 amount_of_water_drank = randint(4, 12),
-                size_of_main_waterbottle = 24
+                water_goal = randint(1,128),
+                size_of_main_waterbottle = 8
             )
         )
     return users

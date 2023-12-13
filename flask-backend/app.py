@@ -31,6 +31,13 @@ def get_users():
     data = [user.to_dict() for user in users]
     return make_response(data), 200
 
+@app.get('/api/userData')
+@authorization_required
+def get_userData(current_user):
+    userData = User.query.get(current_user["id"]).to_dict()
+    print(userData)
+    return make_response(userData, 200)
+
 
 @app.get('/api/get_user_water')
 @authorization_required
@@ -102,6 +109,7 @@ def user_login():
             # NOTE: Sessions are to servers what cookies are to clients.
             # NOTE: Server sessions are NOT THE SAME as database sessions! (`session != db.session`)
             session["user_id"] = matching_user.id
+            print(session["user_id"])
 
             return make_response(matching_user.to_dict(only=("id", "username")), 200)
         else:
