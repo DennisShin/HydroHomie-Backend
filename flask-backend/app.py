@@ -18,6 +18,7 @@ import bcrypt
 @app.get('/')
 def hello():
     return "Hello, world"
+    
 
 @app.get('/api/friends')
 def get_data():
@@ -31,12 +32,55 @@ def get_users():
     data = [user.to_dict() for user in users]
     return make_response(data), 200
 
+@app.get('/api/users/<int:user_id>')
+def get_user_by_id(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return make_response(jsonify({'ERROR': 'USER NOT FOUND'}), 404)
+    data = user.to_dict()
+    return make_response(jsonify(data), 200)
+
+# PATCH Route to update mob's info in database
+# @app.route("/mobs/<int:mob_id>", methods=["PATCH"])
+# def update_mob_by_id(mob_id: int):
+#     # GET my mob in database that matches the right id.
+#     matching_mob = Mob.query.filter(Mob.mob_id == mob_id).first()
+#     try:
+#         payload = request.json
+#         # Set each mathcing mob's attribute to the right value
+#         for key in payload:
+#         #   If a specific key-value chnage was requested, update that key
+#         #   Otherwise leave it as the old value
+#             setattr(matching_mob, key, payload[key])
+#         # Add and Commit changes to database
+#         db.session.add(matching_mob)
+#         db.session.commit()
+#         #Either return the changed mob or return an error
+#         return make_response(jsonify(matching_mob.to_dict()), 200)
+#     except:
+#         return make_response(jsonify({"ERROR": "PATCH failed. Seek help."}))
+
+@app.patch('/api/users/<int:user_id>')
+def update_watercount(user_id: int):
+    user = User.query.filter(User.id == user_id).first()
+    try:
+        payload = request.json
+        print(payload)
+        for key in payload:
+            setattr(user, key, payload[key])
+
+        db.session.add(user)
+        db.session.commit()
+
+        return make_response(jsonify(user.to_dict()), 200)
+    except:
+        return make_response(jsonify({"ERROR": "PATCH FAILED"}))
+
 @app.get('/api/userData')
 @authorization_required
 def get_userData(current_user):
-    userData = User.query.get(current_user["id"]).to_dict()
-    print(userData)
-    return make_response(userData, 200)
+    userData = User.query.get(current_user["id"])
+    return make_response(jsonify(userData.to_dict()), 200)
 
 
 @app.get('/api/get_user_water')
@@ -133,4 +177,4 @@ def user_logout():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5555, debug=True)

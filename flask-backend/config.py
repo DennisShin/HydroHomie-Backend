@@ -4,7 +4,7 @@
 
 
 # Flask application architecture tools.
-from flask import Flask
+from flask import Flask, session
 # Cross-origin resource sharing tools.
 from flask_cors import CORS
 # Database migration and updating tools.
@@ -38,6 +38,7 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 
+
 #######################################################
 ########## ADDITIONAL SERVER CONFIGURATION(S) #########
 #######################################################
@@ -45,6 +46,8 @@ db.init_app(app)
 
 # Enable cross-origin resource sharing between server and HTTP-based clients.
 CORS(app)
+
+
 
 # Load environment variables for additional application configuration.
 load_dotenv()

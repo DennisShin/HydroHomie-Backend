@@ -12,6 +12,7 @@ faker = "*"
 flask-cors = "*"
 bcrypt = "*"
 python-dotenv = "*"
+flask-session = "*"
 
 [dev-packages]
 
