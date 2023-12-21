@@ -5,6 +5,7 @@ from models import Friends, User
 from config import app, db
 from middleware import authorization_required
 import bcrypt
+from datetime import date
 
 
 
@@ -20,11 +21,23 @@ def hello():
     return "Hello, world"
     
 
-@app.get('/api/friends')
-def get_data():
-    friends = Friends.query.all()
-    data = [friend.to_dict() for friend in friends]
-    return make_response(data), 200
+@app.get('/api/date')
+def get_date():
+    today = date.today()
+    formatted_date = date.isoformat(today)
+    return {"Today" : formatted_date}
+
+@app.get('/api/completed')
+def get_completed():
+    pass
+
+# @app.get('/api/users/<int:user_id>/completed')
+# def get_completed(user_id):
+#     user = User.query.get(user_id)
+#     if not user:
+#         return make_response(jsonify({'ERROR': 'USER NOT FOUND'}), 404)
+#     data = user.completed_days
+#     return make_response(jsonify(data), 200)
 
 @app.get('/api/users')
 def get_users():
@@ -38,6 +51,14 @@ def get_user_by_id(user_id):
     if not user:
         return make_response(jsonify({'ERROR': 'USER NOT FOUND'}), 404)
     data = user.to_dict()
+    return make_response(jsonify(data), 200)
+
+@app.get('/api/users/<int:user_id>/completed')
+def get_completed_days(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return make_response(jsonify({'ERROR': 'USER NOT FOUND'}), 404)
+    data = user.completed_days
     return make_response(jsonify(data), 200)
 
 # PATCH Route to update mob's info in database

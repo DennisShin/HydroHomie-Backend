@@ -18,6 +18,8 @@ class User(db.Model, SerializerMixin):
     amount_of_water_drank = db.Column(db.Integer)
     water_goal = db.Column(db.Integer, default=16, nullable=False)
     size_of_main_waterbottle = db.Column(db.Integer)
+    completed_days = db.Column(db.String)
+    streak = db.Column(db.Integer)
 
     friends = db.relationship("Friends", back_populates = "user")
 
